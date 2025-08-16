@@ -94,4 +94,16 @@ public class CustomerController {
 		return allCustomer;
 				
 	}
+	
+	@GetMapping("/delete/{accNum}")
+	public ResponseEntity<?> deleteCustomer(@PathVariable Long accNum) {
+		try {
+		String deleteAccount = service.deleteAccount(accNum);
+		return new ResponseEntity<String>(deleteAccount,HttpStatus.OK);
+		}catch (Exception e) {
+			return ResponseEntity
+					.badRequest()
+					.body(e.getMessage());
+		}
+	}
 }
