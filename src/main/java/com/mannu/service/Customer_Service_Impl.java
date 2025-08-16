@@ -106,8 +106,12 @@ public class Customer_Service_Impl implements ICustomerService{
 
 	@Override
 	public String deleteAccount(Long accNum) {
-		// TODO Auto-generated method stub
-		return null;
+		if(repo.existsById(accNum)) {
+			repo.deleteById(accNum);
+			return "customer account has deleted..";
+		}
+		else
+			throw new IllegalArgumentException("Invalid Account Number..");
 	}
 
 	@Override
