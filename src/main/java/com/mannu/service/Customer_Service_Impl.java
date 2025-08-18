@@ -2,6 +2,7 @@ package com.mannu.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -116,14 +117,62 @@ public class Customer_Service_Impl implements ICustomerService{
 
 	@Override
 	public String updateCustomer(Long accNum, Customer_Dto dto) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Customer_Data> customerData = repo.findById(accNum);
+		if(!customerData.isPresent())
+			throw new IllegalArgumentException(accNum + ": Account number is not valid.");
+		
+ Customer_Data customer = customerData.get();
+ customer.setAcctype(dto.getAcctype());
+ customer.setBalance(dto.getBalance());
+ customer.setBankName(dto.getBankName());
+ customer.setBranchName(dto.getBranchName());
+ customer.setCustomer_Name(dto.getCustomer_Name());
+ customer.setCustomerId(dto.getCustomerId());
+ customer.setEmail(dto.getEmail());
+ customer.setGender(dto.getGender());
+ customer.setIfscCode(dto.getIfscCode());
+ Customer_Data updatedCustomer = repo.save(customer);
+	  mapper.map(updatedCustomer, Customer_Dto.class);
+		return "Customer record is updated.";
+
 	}
 
 	@Override
 	public String patchUpdate(Long accNum, Customer_Dto dto) {
-		// TODO Auto-generated method stub
-		return null;
+    Optional<Customer_Data> optionalCuatomer = repo.findById(accNum);
+  if(!optionalCuatomer.isPresent())
+	  throw new IllegalArgumentException(accNum + " : is not a valid Account Number");
+  
+  Customer_Data customer_Data = optionalCuatomer.get();
+  if(dto.getAcctype()!=null)
+	  customer_Data.setAccNum(accNum);
+  
+  if(dto.getBalance()!=null)
+	  customer_Data.setBalance(dto.getBalance());
+  
+  if(dto.getBankName()!=null)
+	  customer_Data.setBankName(dto.getBankName());
+  
+  if(dto.getBranchName()!=null)
+	  customer_Data.setBranchName(dto.getBranchName());
+  
+  if(dto.getCustomer_Name()!=null)
+	  customer_Data.setCustomer_Name(dto.getCustomer_Name());
+  
+  if(dto.getCustomerId()!=null)
+	  customer_Data.setCustomerId(dto.getCustomerId());
+  
+  if(dto.getEmail()!=null)
+	  customer_Data.setEmail(dto.getEmail());
+  
+  if(dto.getGender()!=null)
+	  customer_Data.setGender(dto.getGender());
+  
+  if(dto.getIfscCode()!=null)
+	  customer_Data.setIfscCode(dto.getIfscCode());
+  Customer_Data updateCustomer = repo.save(customer_Data);
+  mapper.map(updateCustomer, Customer_Dto.class);
+	return "customer is updated";
 	}
 
 }
