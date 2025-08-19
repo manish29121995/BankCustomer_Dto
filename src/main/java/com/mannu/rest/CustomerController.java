@@ -47,7 +47,7 @@ public class CustomerController {
 		  catch (IllegalArgumentException e) {
 			    return ResponseEntity
 			            .badRequest()
-			            .body("Error : " +  e.getMessage());
+			            .body("Error : z	" +  e.getMessage());
 			}
 	  }
 	
@@ -94,6 +94,7 @@ public class CustomerController {
 	@GetMapping("/all")
 	public List<Customer_Dto> getAllCustomer(){
 		List<Customer_Dto> allCustomer = service.getAllCustomer();
+		System.out.println(allCustomer);
 		return allCustomer;
 				
 	}

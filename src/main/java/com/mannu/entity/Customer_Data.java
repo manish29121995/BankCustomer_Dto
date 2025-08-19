@@ -27,6 +27,7 @@ public class Customer_Data {
 	private String customer_Name;
 	private String email;
 	private String gender;
+	private String activeSw;
 	
 	@CreationTimestamp
 	@Column(name = "create_date", updatable = false)

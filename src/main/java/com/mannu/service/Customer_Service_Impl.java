@@ -31,7 +31,8 @@ public class Customer_Service_Impl implements ICustomerService{
     if(data.getBalance()<=0) {
     throw new IllegalArgumentException("balance should be valid amount ");
    }
-      data.setDate(LocalDate.now().minusDays(10));
+      data.setDate(LocalDate.now());
+      data.setActiveSw("Y");
     	   Customer_Data save = repo.save(data);
     	   return mapper.map(save, Customer_Dto.class);
     	   
@@ -99,21 +100,45 @@ public class Customer_Service_Impl implements ICustomerService{
 	@Override
 	public List<Customer_Dto>  getAllCustomer() {
 
-		List<Customer_Data> all = repo.findAll();
+		// for fetching all  accounts..
+		//List<Customer_Data> all = repo.findAll();
+		
+		// for fetching only active account. deleted account will not show 
+		List<Customer_Data> all = repo.findByActiveSw("Y");
+		
        return   all.stream()
           .map(e->mapper.map(e, Customer_Dto.class))
           .collect(Collectors.toList());
+       
 	}
+	
 
+	// soft delete
+	
 	@Override
 	public String deleteAccount(Long accNum) {
-		if(repo.existsById(accNum)) {
-			repo.deleteById(accNum);
-			return "customer account has deleted..";
+		Optional<Customer_Data> optionalAccount = repo.findById(accNum);
+		
+		if(optionalAccount.isPresent()) {
+			Customer_Data customer_Data = optionalAccount.get();
+			customer_Data.setActiveSw("N");
+			repo.save(customer_Data);
+			return "customer account has marked to deleted.";
 		}
 		else
-			throw new IllegalArgumentException("Invalid Account Number..");
-	}
+			throw new IllegalArgumentException("invalid account number : " + accNum);
+	}	
+	
+	
+//	@Override
+//	public String deleteAccount(Long accNum) {
+//		if(repo.existsById(accNum)) {
+//			repo.deleteById(accNum);
+//			return "customer account has deleted..";
+//		}
+//		else
+//			throw new IllegalArgumentException("Invalid Account Number..");
+//	}
 
 	@Override
 	public String updateCustomer(Long accNum, Customer_Dto dto) {

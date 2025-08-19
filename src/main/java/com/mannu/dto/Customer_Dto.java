@@ -14,5 +14,6 @@ public class Customer_Dto {
  private String customer_Name;
  private String email;
  private String gender;
+ private String activeSw;
 
 }
